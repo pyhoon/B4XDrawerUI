@@ -1,34 +1,61 @@
 ﻿AppType=JavaFX
 Build1=Default,b4j.example
-File1=Layout1.bjl
+File1=CenterPanel.bjl
+File2=LeftPanel.bjl
+File3=logo-02.png
+File4=Root.bjl
 FileGroup1=Default Group
+FileGroup2=Default Group
+FileGroup3=Default Group
+FileGroup4=Default Group
 Group=Default Group
-Library1=jcore
-Library2=jfx
-Library3=jxui
-NumberOfFiles=1
-NumberOfLibraries=3
+Library1=b4xdrawer
+Library2=jcore
+Library3=jfx
+Library4=jxui
+Library5=xui views
+NumberOfFiles=4
+NumberOfLibraries=5
 NumberOfModules=0
-Version=8.31
+Version=10.5
 @EndOfDesignText@
+'Code module
 #Region Project Attributes 
-	#MainFormWidth: 600
+	'#ApplicationLabel: B4XDrawer
+	'#Version: 1.0.0
+	#MainFormWidth: 900
 	#MainFormHeight: 600 
 #End Region
 
 Sub Process_Globals
 	Private fx As JFX
+	Private xui As XUI
+	Private Root As B4XView
 	Private MainForm As Form
-	Private xui As XUI 
-	Private Button1 As B4XView
+	Private Drawer As B4XDrawer
+	Private CustomListView1 As CustomListView
+	Private BtnMenu As B4XView
 End Sub
 
 Sub AppStart (Form1 As Form, Args() As String)
 	MainForm = Form1
-	MainForm.RootPane.LoadLayout("Layout1")
+	MainForm.RootPane.LoadLayout("Root")
 	MainForm.Show
+
+	'Drawer.Initialize(Me, "Drawer", MainForm, 200dip)
+	Drawer.Initialize(Me, "Drawer", Root, 200dip)
+	Drawer.CenterPanel.LoadLayout("CenterPanel")
+	Drawer.LeftPanel.LoadLayout("LeftPanel")
+	CustomListView1.DefaultTextBackgroundColor = 0xFF77CAFF
+	For i = 1 To 30
+		CustomListView1.AddTextItem($"Item #${i}"$, "")
+	Next
 End Sub
 
-Sub Button1_Click
-	xui.MsgboxAsync("Hello World!", "B4X")
+Sub Root_Resize (Width As Double, Height As Double)
+	If Drawer.IsInitialized Then Drawer.Resize(Width, Height)
+End Sub
+
+Private Sub BtnMenu_MouseClicked (EventData As MouseEvent)
+	Drawer.LeftOpen = Not(Drawer.LeftOpen)
 End Sub
